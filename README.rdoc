@@ -4,6 +4,7 @@ Rails simple app deployed on dokku.
 
 To migrate 
 
-```
+```ruby
 dokku run appname bundle exec rake db:migrate
 ```
+
