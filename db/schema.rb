@@ -1,4 +1,3 @@
-# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -11,10 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151017221120) do
+ActiveRecord::Schema.define(version: 20181219021058) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "articles", id: :bigserial, force: :cascade do |t|
+    t.string   "title"
+    t.text     "text"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "assets", id: :bigserial, force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "blogs", force: :cascade do |t|
     t.string   "title"
@@ -23,27 +35,30 @@ ActiveRecord::Schema.define(version: 20151017221120) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "borrower", force: :cascade do |t|
-    t.float "active"
+  create_table "comments", id: :bigserial, force: :cascade do |t|
+    t.string   "commenter"
+    t.text     "body"
+    t.bigint   "article_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["article_id"], name: "index_comments_on_article_id", using: :btree
   end
 
-  create_table "customer", force: :cascade do |t|
-    t.string "name",  limit: 1000, null: false
-    t.string "email"
+  create_table "networths", id: :bigserial, force: :cascade do |t|
+    t.decimal  "value"
+    t.datetime "date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
-  add_index "customer", ["email"], name: "customer_email_key", unique: true, using: :btree
-
-  create_table "customers", force: :cascade do |t|
-    t.string  "name"
-    t.integer "age"
+  create_table "tokens", id: :bigserial, force: :cascade do |t|
+    t.string   "name"
+    t.bigint   "article_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["article_id"], name: "index_tokens_on_article_id", using: :btree
   end
 
-  create_table "todo_lists", force: :cascade do |t|
-    t.string   "title"
-    t.text     "description"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
-  end
-
+  add_foreign_key "comments", "articles"
+  add_foreign_key "tokens", "articles"
 end
